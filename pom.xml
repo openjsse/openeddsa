@@ -1,0 +1,283 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.openeddsa</groupId>
+    <artifactId>openeddsa</artifactId>
+    <version>1.1.0</version>
+
+    <name>openeddsa</name>
+
+    <url>http://openjsse.github.io/openeddsa/</url>
+
+    <description>
+        JCE provider for the EdDSA crypto algorithms for Java SE 8
+    </description>
+
+    <licenses>
+        <license>
+            <name>GPLv2 with the Classpath Exception</name>
+            <url>https://openjdk.java.net/legal/gplv2+ce.html</url>
+        </license>
+        <license>
+            <name>BSD-2-Clause</name>
+            <url>https://opensource.org/licenses/BSD-2-Clause</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>alexeybakhtin</id>
+            <name>Alexey Bakhtin</name>
+            <url>https://github.com/alexeybakhtin</url>
+        </developer>
+    </developers>
+
+    <scm>
+        <url>scm:git:git://github.com/openjsse/openeddsa.git</url>
+        <connection>scm:git:git://github.com/openjsse/openeddsa.git</connection>
+        <developerConnection>scm:git:git@github.com:openjsse/openeddsa.git</developerConnection>
+        <tag>1.1.4</tag>
+    </scm>
+
+
+    <issueManagement>
+        <url>https://github.com/openjsse/openeddsa/issues</url>
+        <system>GitHub Issues</system>
+    </issueManagement>
+    
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <java.version.template.file>src/main/java/org/openeddsa/Version.java.template</java.version.template.file>
+        <java.version.file>src/main/java/org/openeddsa/Version.java</java.version.file>
+        <version.template.file>src/main/templates/VERSION.template</version.template.file>
+        <version.file>src/main/resources/VERSION</version.file>
+        <jdk.version>1.8</jdk.version>
+        <jdk.api>https://docs.oracle.com/javase/8/docs/api/</jdk.api>
+        <jar.finalName>${project.artifactId}-${project.version}</jar.finalName>
+        <build.output>${project.basedir}/target</build.output>
+        <build.bootclasspath>${java.home}/lib/resources.jar${path.separator}${java.home}/lib/rt.jar${path.separator}${java.home}/lib/jce.jar</build.bootclasspath>
+    </properties>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <build>
+        <finalName>${jar.finalName}</finalName>
+        <directory>${build.output}</directory>
+	<testSourceDirectory>test/java1.8</testSourceDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.1.2</version>
+                <inherited>true</inherited>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <excludePackageNames>org.openeddsa:org.openeddsa.sun.*</excludePackageNames>
+                    <!-- force links to Java 8 documentation (should happen automatically
+                        but doesn't) -->
+                    <javaApiLinks>
+                        <property>
+                            <name>api_${jdk.version}</name>
+                            <value>${jdk.api}</value>
+                        </property>
+                    </javaApiLinks>
+                    <bottom>
+                        <![CDATA[<br>Note:]]>
+                        <![CDATA[<br>This documentation was generated from sources backported from code in the OpenJDK 15 project, carrying the GPLv2+CPE License.]]>
+                        <![CDATA[<br>Java is a trademark or registered trademark of Oracle and/or its affiliates in the US and other countries.]]>
+                        <![CDATA[<br>Copyright © 1993, 2020, Oracle and/or its affiliates, 500 Oracle Parkway, Redwood Shores, CA 94065 USA.]]>
+                        <![CDATA[<br>All rights reserved.]]>
+                    </bottom>
+                    <tags>
+                        <tag>
+                            <name>apiNote</name>
+                            <placement>a</placement>
+                            <head>API Note:</head>
+                        </tag>
+                        <tag>
+                            <name>implSpec</name>
+                            <placement>a</placement>
+                            <head>Implementation Requirements:</head>
+                        </tag>
+                        <tag>
+                            <name>implNote</name>
+                            <placement>a</placement>
+                            <head>Implementation Note:</head>
+                        </tag>
+                        <tag><name>param</name></tag>
+                        <tag><name>return</name></tag>
+                        <tag><name>throws</name></tag>
+                        <tag><name>since</name></tag>
+                        <tag><name>version</name></tag>
+                        <tag><name>serialData</name></tag>
+                        <tag><name>see</name></tag>
+                    </tags>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>attach-test-sources</id>
+                        <goals>
+                            <goal>test-jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                        <configuration>
+                            <sources>
+                                <source>src/main/java${jdk.version}</source>
+                            </sources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <compilerArguments>
+                        <bootclasspath>${build.bootclasspath}</bootclasspath>
+                    </compilerArguments>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>default-testCompile</id>
+                        <phase>none</phase>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M3</version>
+                <configuration>
+                    <enableAssertions>false</enableAssertions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.3</version>
+                <configuration>
+                    <autoVersionSubmodules>true</autoVersionSubmodules>
+                    <useReleaseProfile>false</useReleaseProfile>
+                    <releaseProfiles>release</releaseProfiles>
+                    <goals>deploy</goals>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <id>replace-for-sources</id>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${java.version.template.file}</file>
+                            <outputFile>${java.version.file}</outputFile>
+                            <replacements>
+                                <replacement>
+                                    <token>\$BUILD_TIME\$</token>
+                                    <value>${maven.build.timestamp}</value>
+                                </replacement>
+                                <replacement>
+                                    <token>\$VERSION\$</token>
+                                    <value>${project.version}</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <id>replace-for-resources</id>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                        <configuration>
+                            <file>${version.template.file}</file>
+                            <outputFile>${version.file}</outputFile>
+                            <replacements>
+                                <replacement>
+                                    <token>\$BUILD_TIME\$</token>
+                                    <value>${maven.build.timestamp}</value>
+                                </replacement>
+                                <replacement>
+                                    <token>\$VERSION\$</token>
+                                    <value>${project.version}</value>
+                                </replacement>
+                            </replacements>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.8</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
